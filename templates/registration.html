@@ -1,0 +1,36 @@
+{%extends"base1.html"%}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-top: 1rem">
+        <div class="col-lg-8">
+            <h5 style="text-align: center">Регистрация</h5>
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.name.label}}<br>
+                        {{ form.name(class="form-control") }}
+                    </p>
+                    <p>
+                        {{ form.surname.label}}<br>
+                        {{ form.surname(class="form-control") }}
+                    </p>
+                     <p>
+                        {{ form.login.label}}<br>
+                        {{ form.login(class="form-control") }}
+                    </p>
+                    <p>
+                        {{ form.password.label}}<br>
+                        {{ form.password(class="form-control", type="password") }}
+                        {%for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p style="text-align:center">
+                        {{ form.submit(type="submit",class="login") }}
+                    </p>
+                </form>
+        </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+body{
+    font-family: 'Quicksand', sans-serif;
+
+}
+ a.c {
+    border: 1px solid #e66e76; /* Рамка */
+    display: inline-block;
+    padding: 3px 10px; /* Поля */
+    text-decoration: none; /* Убираем подчёркивание */
+     border-radius: 10px;
+    color: #000; /* Цвет текста */
+     font-family: 'Quicksand', sans-serif;
+  }
+ a.c:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: linear-gradient(to bottom, #dbadb0 0%, #db777d 100%); /* Градиент */
+    color: #000;
+   }
+ a.button {
+    border: 1px solid #e66e76; /* Рамка */
+    display: inline-block;
+    padding: 5px 15px; /* Поля */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 10px;
+    color: #000; /* Цвет текста */
+    font-size: 25px;
+    font-family: 'Quicksand', sans-serif;
+  }
+ a.button:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: linear-gradient(to bottom, #dbadb0 0%, #db777d 100%);
+    text-decoration: none;/* Градиент */
+    color: #000;
+   }
+  .login {
+    border: 1px solid #e66e76; /* Рамка */
+    display: inline-block;
+    padding: 5px 20px; /* Поля */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 10px;
+    color: #000; /* Цвет текста */
+    font-size: 20px;
+    font-family: 'Quicksand', sans-serif;
+  }
+.login:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: linear-gradient(to bottom, #dbadb0 0%, #db777d 100%);
+    text-decoration: none;/* Градиент */
+    color: #000;
+   }
+span.color{
+    color: #e66e76;
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Modak', cursive;
+    font-family: 'Indie Flower', cursive;
+}
+h5.logo{
+    float: left;
+    width: 50%;
+}
+img.mainpic{
+    width: 70%;
+    margin-left: 9rem;
+}
+
+

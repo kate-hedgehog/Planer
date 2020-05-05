@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Acme&family=Arvo&family=Indie+Flower&family=Modak&family=Pacifico&family=Quicksand&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div class="container">
+        <div class="col-lg-12" style="margin-top: 5px">
+            <h5 class = "logo"><span class="color"><b>Planer</b></span> - для тех, кто ценит время</h5>
+            <div style="text-align: right">
+                <a href="/login" class="c"><span style="font-family: Quicksand, sans-serif;">Вход</span></a>
+                <a href="/registration" class="c"><span style="font-family: Quicksand, sans-serif;">Регистрация</span></a>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <img class="mainpic" src="{{ url_for('static', filename='img/main.jpg') }}" alt="альтернативный текст">
+        </div>
+        <div class="row justify-content-center" style="margin-top: 1rem">
+            <div class="col-lg-10" style="text-align: center">
+                <h3><span class="color"><b>Planer</b></span> – это онлайн дневник: для самоанализа, учёта целей и задач. Простой способ быть эффективнее – не держи всё в голове</h3>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 5rem;margin-left:26rem">
+            <div class = "col-lg-1">
+                <a href="/registration" class="button"><span style="font-family: Quicksand, sans-serif">Присоединиться</span></a>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer justify-content-center pt-4" style="background-color: #ece7e5; margin-top: 5rem">
+          <div class="container text-center text-md-left">
+            <div class="row justify-content-center">
+              <div class="col-xs-12 col-lg-6">
+                <img src="{{ url_for('static', filename='img/clock.jpg') }}" alt="альтернативный текст">
+              </div>
+              <div class="col-xs-12 col-lg-6">
+                <h5>Контакты</h5>
+                <ul style="list-style-type:none;padding: 0;">
+                  <li>
+                    <p><a style="color:#000000" href="mailto:#">lebedeva_ekaterina_97@mail.ru</a></p>
+                  </li>
+                  <li>
+                    <p><a style="color:#000000" href="tel:#">8-966-666-66-66</a></p>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 col-lg-12">
+                  <hr style="background-color: #ffffff;">© 2020. РТУ-МИРЭА
+              </div>
+            </div>
+          </div>
+        </footer>
+</body>
+</html>
+
+
