@@ -3,6 +3,7 @@ from data import db_session
 from forms import LoginForm, RegistrationForm
 
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
 db_session.global_init("db/plan.sqlite")

@@ -1,10 +1,10 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
-from . import __all_models
-import sqlalchemy.ext.declarative as dec
+from .temp_db import SqlAlchemyBase
+# noinspection PyUnresolvedReferences
+from data import __all_models
 
-SqlAlchemyBase = dec.declarative_base()
 
 __factory = None
 
@@ -23,6 +23,6 @@ def global_init(db_file):
     SqlAlchemyBase.metadata.create_all(engine)
 
 
-def create_session()->Session:
+def create_session() -> Session:
     global __factory
     return __factory()
