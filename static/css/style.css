@@ -48,15 +48,21 @@ body{
     text-decoration: none;/* Градиент */
     color: #000;
    }
-span.color{
+.color{
     color: #e66e76;
+    text-decoration: none;
     font-family: 'Quicksand', sans-serif;
     font-family: 'Modak', cursive;
     font-family: 'Indie Flower', cursive;
 }
-h5.logo{
+.color:hover{
+    color: #e66e76;
+    text-decoration: none;
+}
+.logo{
     float: left;
     width: 50%;
+
 }
 img.mainpic{
     width: 70%;
