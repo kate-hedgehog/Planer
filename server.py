@@ -1,8 +1,14 @@
-from flask import Flask, url_for, request, render_template, redirect
-from flask_login import LoginManager, login_user
+import datetime
+
+from flask import Flask, render_template, redirect
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
-from forms import LoginForm, RegistrationForm
+from forms import LoginForm, RegistrationForm, TasksForm
 from data.db_session import __all_models as models
+
+
+now = datetime.datetime.now()
+
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -17,10 +23,12 @@ def load_user(user_id):
     return session.query(models.user.User).get(user_id)
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title='Planer')
+    session = db_session.create_session()
+    form = session.query(models.tasks.Tasks)#.filter(models.tasks.Tasks.data == now.strftime("%d-%m-%Y"))
+    return render_template('index.html', title='Planer', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -53,6 +61,57 @@ def registration():
         return redirect('/login')
     return render_template('registration.html', title='Регистрация', form=form)
 
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@app.route('/tasks',  methods=['GET','POST'])
+@login_required
+def add_tasks():
+    form =TasksForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        tasks = models.tasks.Tasks()
+        tasks.text_task = form.text_task.data
+        tasks.description = form.description.data
+        tasks.data = form.data.data
+        tasks.start_time = form.start_time.data
+        tasks.end_time = form.end_time.data
+        tasks.id_important = form.important.data
+        tasks.user = current_user
+        session.merge(tasks)
+        session.commit()
+        return redirect('/')
+    return render_template('tasks.html', title='Добавление Задачи', form=form)
+
+
+@app.route('/alltasks',  methods=['GET','POST'])
+def all_tasks():
+    session = db_session.create_session()
+    form = session.query(models.tasks.Tasks)  # .filter(models.tasks.Tasks.data == now.strftime("%d-%m-%Y"))
+    return render_template('alltasks.html', title='Planer', form=form)
+
+
+@app.route('/trackers',  methods=['GET','POST'])
+def all_trackers():
+    session = db_session.create_session()
+    return render_template('trackers.html', title='Planer')
+
+
+@app.route('/alltasks_week',  methods=['GET','POST'])
+def all_tasks_week():
+    session = db_session.create_session()
+    return render_template('alltasks_week.html', title='Planer')
+
+
+@app.route('/alltasks_month',  methods=['GET','POST'])
+def all_tasks_month():
+    session = db_session.create_session()
+    return render_template('alltasks_month.html', title='Planer')
 
 def main():
     app.run()

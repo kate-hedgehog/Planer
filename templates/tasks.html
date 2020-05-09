@@ -1,0 +1,71 @@
+{%extends"base1.html"%}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-top: 1rem">
+        <div class="col-lg-8" style="background-color:#ece7e5;border-radius: 20px">
+            <h5 style="text-align: center;margin-top: 1rem">Добавление задачи</h5>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }}
+                    <p>
+                        {{ form.text_task.label}}<br>
+                        {{ form.text_task(class="form-control") }}
+                        {%for error in form.text_task.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.description.label}}<br>
+                        {{ form.description(class="form-control") }}
+                        {%for error in form.description.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.data.label}}<br>
+                        {{ form.data(class="form-control") }}
+                        {%for error in form.data.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.start_time.label}}<br>
+                        {{ form.start_time(class="form-control", type="time") }}
+                        {%for error in form.start_time.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.end_time.label}}<br>
+                        {{ form.end_time(class="form-control", type="time") }}
+                        {%for error in form.end_time.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.important.label }}
+                        <div class="form-check form-check-inline">
+                        {{ form.important(class="form-check-input", type="radio", value=1) }}
+                        {{ form.important(class="form-check-input", type="radio", value=2) }}
+                        {{ form.important(class="form-check-input", type="radio", value=3) }}
+                        </div>
+                    </p>
+                    <p style="text-align:center">
+                        {{ form.submit(type="submit",class="login") }}
+                    </p>
+                <p style="margin-top: 1rem; text-align: center; font-family: 'Quicksand', sans-serif;">{{message}}</p>
+                </form>
+        </div>
+</div>
+{% endblock %}
+

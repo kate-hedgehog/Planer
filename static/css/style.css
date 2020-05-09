@@ -68,5 +68,18 @@ img.mainpic{
     width: 70%;
     margin-left: 9rem;
 }
+a.navbar{
+    color: #e66e76;
+}
+th{
+    color: #e66e76;
+    text-align: center;
+    width: 100px;
+}
+td{
+    width: 100px;
+    height: 100px;
+}
+
 
 

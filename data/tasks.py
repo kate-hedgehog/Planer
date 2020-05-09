@@ -15,3 +15,5 @@ class Tasks(SqlAlchemyBase):
     user = orm.relation('User')
     id_important = sa.Column(sa.Integer, sa.ForeignKey("important.id_important"))
     important = orm.relation('Important')
+    id_execute = sa.Column(sa.Integer, sa.ForeignKey("execute.id_execute"))
+    execute = orm.relation('Execute')

@@ -17,8 +17,13 @@
         <div class="col-lg-12" style="margin-top: 5px">
             <h5  class = "logo"><b><a href="/" class = "color">Planer</a></b> - для тех, кто ценит время</h5>
             <div style="text-align: right">
-                <a href="/login" class="c"><span style="font-family: Quicksand, sans-serif;">Вход</span></a>
-                <a href="/registration" class="c"><span style="font-family: Quicksand, sans-serif;">Регистрация</span></a>
+                {%if current_user.is_authenticated %}
+                    {{ current_user.name }}
+                    <a href="/logout" class="c"><span style="font-family: Quicksand, sans-serif;">Выход</span></a>
+                {%else%}
+                    <a href="/login" class="c"><span style="font-family: Quicksand, sans-serif;">Вход</span></a>
+                    <a href="/registration" class="c"><span style="font-family: Quicksand, sans-serif;">Регистрация</span></a>
+                {% endif %}
             </div>
         </div>
         <!-- Begin page content -->
