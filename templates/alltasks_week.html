@@ -36,55 +36,76 @@
     </div>
 </div>
 <div class="col-lg-4" style="margin-top: 1rem">
-    <input type="date" class="form-control" id="date" name="date" placeholder="Дата" required>
+    <form action="" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }}
+                    <p>
+                        {{ form.data.label}}<br>
+                        {{ form.data(type="date", class="form-control") }}
+                        {%for error in form.data.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p style="text-align:center">
+                        {{ form.submit(type="submit",class="login") }}
+                    </p>
+                <p style="margin-top: 1rem; text-align: center; font-family: 'Quicksand', sans-serif;">{{message}}</p>
+    </form>
 </div>
-<div class="col-lg-12">
+<div class="col-lg-12" style="margin-top: 1rem">
+    <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
     <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">Понедельник</th>
-      <th scope="col">Вторник</th>
-      <th scope="col">Среда</th>
-      <th scope="col">Четверг</th>
-      <th scope="col">Пятница</th>
-      <th scope="col">Суббота</th>
-      <th scope="col">Воскресенье</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <<td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+        <thead>
+            <tr>
+                {%for key in day_date%}
+                    <th scope="col">
+                        {{ key }} <br>
+                        {{ day_date[key]}}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {%for key in day_date %}
+                    <td>
+                    {%for item in tasks %}
+                        {% if key == item.day %}
+
+                                {% if item.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
   </tbody>
-</table>
+    </table>
 </div>
 {%if current_user.is_authenticated %}
     <a href="/tasks"class="btn btn-secondary">Добавить запись</a>

@@ -1,14 +1,14 @@
-import datetime
+from datetime import datetime, date, timedelta
 
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
-from forms import LoginForm, RegistrationForm, TasksForm
+from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm, AllTasksWeekForm, AllTasksMonthForm
 from data.db_session import __all_models as models
 
-
-now = datetime.datetime.now()
-
+now = datetime.today().strftime("%Y-%d-%m")
+DAY_RU = {'Monday': 'Понедельник', 'Tuesday': 'Вторник', 'Wednesday': 'Среда', 'Thursday': 'Четверг',
+          'Friday': 'Пятница', 'Saturday': 'Суббота', 'Sunday': 'Воскресенье'}
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -27,7 +27,7 @@ def load_user(user_id):
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     session = db_session.create_session()
-    form = session.query(models.tasks.Tasks)#.filter(models.tasks.Tasks.data == now.strftime("%d-%m-%Y"))
+    form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == date.today())
     return render_template('index.html', title='Planer', form=form)
 
 
@@ -69,10 +69,10 @@ def logout():
     return redirect("/")
 
 
-@app.route('/tasks',  methods=['GET','POST'])
+@app.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def add_tasks():
-    form =TasksForm()
+    form = TasksForm()
     if form.validate_on_submit():
         session = db_session.create_session()
         tasks = models.tasks.Tasks()
@@ -82,6 +82,7 @@ def add_tasks():
         tasks.start_time = form.start_time.data
         tasks.end_time = form.end_time.data
         tasks.id_important = form.important.data
+        tasks.day = DAY_RU[form.data.data.strftime('%A')]
         tasks.user = current_user
         session.merge(tasks)
         session.commit()
@@ -89,29 +90,48 @@ def add_tasks():
     return render_template('tasks.html', title='Добавление Задачи', form=form)
 
 
-@app.route('/alltasks',  methods=['GET','POST'])
+@app.route('/alltasks', methods=['GET', 'POST'])
 def all_tasks():
     session = db_session.create_session()
-    form = session.query(models.tasks.Tasks)  # .filter(models.tasks.Tasks.data == now.strftime("%d-%m-%Y"))
+    form = AllTasksForm()
+    if form.validate_on_submit():
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == form.data.data)
+        return render_template('alltasks.html', title='Planer', form=form, tasks=tasks)
     return render_template('alltasks.html', title='Planer', form=form)
 
 
-@app.route('/trackers',  methods=['GET','POST'])
+@app.route('/trackers', methods=['GET', 'POST'])
 def all_trackers():
     session = db_session.create_session()
     return render_template('trackers.html', title='Planer')
 
 
-@app.route('/alltasks_week',  methods=['GET','POST'])
+@app.route('/alltasks_week', methods=['GET', 'POST'])
 def all_tasks_week():
+    day_date = {}
     session = db_session.create_session()
-    return render_template('alltasks_week.html', title='Planer')
+    form = AllTasksWeekForm()
+    if form.validate_on_submit():
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data >= form.data.data) \
+            .filter(models.tasks.Tasks.data <= (form.data.data + timedelta(weeks=1)))
+        for i in range(7):
+            day_date[DAY_RU[(form.data.data + timedelta(days=i)).strftime('%A')]] = \
+                (form.data.data + timedelta(days=i)).strftime("%d-%m-%Y")
+        return render_template('alltasks_week.html', title='Planer', form=form, tasks=tasks, day_date=day_date)
+    return render_template('alltasks_week.html', title='Planer', form=form, day_date=day_date)
 
 
-@app.route('/alltasks_month',  methods=['GET','POST'])
+@app.route('/alltasks_month', methods=['GET', 'POST'])
 def all_tasks_month():
     session = db_session.create_session()
-    return render_template('alltasks_month.html', title='Planer')
+    form = AllTasksMonthForm()
+    if form.validate_on_submit():
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data >= form.data.data) \
+            .filter(models.tasks.Tasks.data <= (form.data.data + timedelta(weeks=4)))
+
+        return render_template('alltasks_month.html', title='Planer', form=form, tasks=tasks)
+    return render_template('alltasks_month.html', title='Planer', form=form)
+
 
 def main():
     app.run()

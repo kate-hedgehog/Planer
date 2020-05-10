@@ -1,5 +1,4 @@
-from datetime import datetime
-
+from datetime import datetime, timedelta
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, TimeField, IntegerField
 from wtforms.validators import DataRequired
@@ -29,4 +28,20 @@ class TasksForm(FlaskForm):
     end_time = TimeField("Время окончания", validators=[DataRequired()], format='%H:%M')
     important = IntegerField("Важность", validators=[DataRequired()])
     submit = SubmitField('Применить')
+
+
+class AllTasksForm(FlaskForm):
+    data =  DateField("Дата", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
+    submit = SubmitField('Показать')
+
+
+class AllTasksWeekForm(FlaskForm):
+    data =  DateField("Неделя с", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
+    submit = SubmitField('Показать')
+
+
+class AllTasksMonthForm(FlaskForm):
+    data =  DateField("Месяц с", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
+    submit = SubmitField('Показать')
+
 

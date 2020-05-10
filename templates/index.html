@@ -18,15 +18,11 @@
                 </ul>
             </div>
         </div>
-        <div class="col-lg-4" style="margin-top: 1rem">
-            <input type="date" class="form-control" id="date" name="date" placeholder="Дата" required>
-        </div>
         <div class="col-lg-12">
             <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
             {%for item in form%}
                 {% if item.id_important == 1 %}
                     <div class="alert alert-danger" role="alert">
-                        {{item.data}}
                         {{item.start_time}}
                         {{item.end_time}}
                         {{item.text_task}}
@@ -36,7 +32,6 @@
                 {% endif %}
                 {% if item.id_important == 2 %}
                     <div class="alert alert-warning" role="alert">
-                        {{item.data}}
                         {{item.start_time}}
                         {{item.end_time}}
                         {{item.text_task}}
@@ -45,7 +40,6 @@
                 {% endif %}
                 {% if item.id_important == 3 %}
                     <div class="alert alert-success" role="alert">
-                        {{item.data}}
                         {{item.start_time}}
                         {{item.end_time}}
                         {{item.text_task}}
@@ -54,9 +48,6 @@
                 {% endif %}
             {% endfor %}
         </div>
-        {%if current_user.is_authenticated %}
-            <a href="/tasks"class="btn btn-secondary">Добавить запись</a>
-        {% endif %}
 {% endblock %}
 
 

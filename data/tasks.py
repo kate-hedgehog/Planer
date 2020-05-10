@@ -11,6 +11,7 @@ class Tasks(SqlAlchemyBase):
     data = sa.Column(sa.Date, nullable=True)
     start_time = sa.Column(sa.Time, nullable=True)
     end_time = sa.Column(sa.Time, nullable=True)
+    day = sa.Column(sa.String, nullable=True)
     id_user = sa.Column(sa.Integer, sa.ForeignKey("user.id_user"))
     user = orm.relation('User')
     id_important = sa.Column(sa.Integer, sa.ForeignKey("important.id_important"))
