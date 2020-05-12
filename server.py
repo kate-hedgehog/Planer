@@ -29,7 +29,8 @@ def index():
     id = []
     session = db_session.create_session()
     data = date.today().strftime("%d-%m-%Y")
-    form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data)
+    form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data).\
+        order_by(models.tasks.Tasks.start_time)
     return render_template('index.html', title='Planer', form=form, data=data)
 
 
@@ -151,7 +152,8 @@ def all_tasks():
     form = AllTasksForm()
     if form.validate_on_submit():
         data = form.data_day.data.strftime("%d-%m-%Y")
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data)
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data).\
+            order_by(models.tasks.Tasks.start_time)
         return render_template('alltasks.html', title='Planer', form=form, tasks=tasks, data=data)
     return render_template('alltasks.html', title='Planer', form=form)
 
@@ -168,8 +170,10 @@ def all_tasks_week():
     session = db_session.create_session()
     form = AllTasksForm()
     if form.validate_on_submit():
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data >= form.data_week.data.strftime("%d-%m-%Y")) \
-            .filter(models.tasks.Tasks.data <= (form.data_week.data + timedelta(weeks=1)).strftime("%d-%m-%Y"))
+        tasks = session.query(models.tasks.Tasks).\
+            filter(models.tasks.Tasks.data >= form.data_week.data.strftime("%d-%m-%Y")) \
+            .filter(models.tasks.Tasks.data <= (form.data_week.data + timedelta(weeks=1)).strftime("%d-%m-%Y")).\
+            order_by(models.tasks.Tasks.start_time)
         for i in range(7):
             day_date[DAY_RU[(form.data_week.data + timedelta(days=i)).strftime('%A')]] = \
                 (form.data_week.data + timedelta(days=i)).strftime("%d-%m-%Y")
