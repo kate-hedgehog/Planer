@@ -132,6 +132,19 @@ def change_tasks(id_task, page):
     return render_template('tasks.html', title='Добавление Задачи', form=form)
 
 
+@app.route('/delete_tasks/<page>/<id_task>', methods=['GET', 'POST'])
+@login_required
+def delete_tasks(id_task, page):
+    session = db_session.create_session()
+    tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
+                                                     models.tasks.Tasks.user == current_user).first()
+    if tasks:
+        session.delete(tasks)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/'+page)
+
 @app.route('/alltasks', methods=['GET', 'POST'])
 def all_tasks():
     session = db_session.create_session()
