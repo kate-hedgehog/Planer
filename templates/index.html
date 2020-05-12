@@ -1,10 +1,10 @@
 {%extends"base2.html"%}
 
 {% block content %}
+{%if current_user.is_authenticated %}
 <div class="row" style="margin-top: 1rem">
             <div class="col-lg-12">
                 <ul class="nav nav-tabs nav-fill">
-                    {%if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link active navbar" href="/">Главная</a>
                     </li>
@@ -14,12 +14,12 @@
                     <li class="nav-item">
                         <a class="nav-link navbar" href="/trackers">Трекеры</a>
                     </li>
-                    {% endif %}
                 </ul>
             </div>
         </div>
         <div class="col-lg-12">
             <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
+            <div  style="text-align: center"><a href="/tasks/index/{{ data }}" class = "tabl">{{ data }}</a></div>
             {%for item in form%}
                 {% if item.id_important == 1 %}
                     <div class="alert alert-danger" role="alert">
@@ -48,6 +48,7 @@
                 {% endif %}
             {% endfor %}
         </div>
+{% endif %}
 {% endblock %}
 
 

@@ -1,6 +1,7 @@
 {%extends"base2.html"%}
 
 {% block content %}
+{%if current_user.is_authenticated %}
 <div class="row" style="margin-top: 1rem">
     <div class="col-lg-12">
         <ul class="nav nav-tabs nav-fill">
@@ -21,7 +22,6 @@
 <div class="row" style="margin-top: 1rem">
     <div class="col-lg-12">
         <ul class="nav nav-tabs nav-fill">
-            {%if current_user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link navbar" href="/alltasks">День</a>
             </li>
@@ -31,7 +31,6 @@
             <li class="nav-item">
                 <a class="nav-link navbar" href="/alltasks_month">Месяц</a>
             </li>
-            {% endif %}
         </ul>
     </div>
 </div>
@@ -62,7 +61,6 @@
                 {%for key in day_date%}
                     <th scope="col">
                         {{ key }} <br>
-                        {{ day_date[key]}}
                     </th>
                 {% endfor %}
             </tr>
@@ -70,8 +68,10 @@
         <tbody>
             <tr>
                 {%for key in day_date %}
-                    <td>
+                    <td style="text-align: center">
+                        <a href="/tasks/alltasks_week/{{ day_date[key]}}" class = "tabl">{{ day_date[key]}}</a>
                     {%for item in tasks %}
+
                         {% if day_date[key] == item.data %}
                                 {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
@@ -106,7 +106,5 @@
   </tbody>
     </table>
 </div>
-{%if current_user.is_authenticated %}
-    <a href="/tasks"class="btn btn-secondary">Добавить запись</a>
 {% endif %}
 {% endblock %}

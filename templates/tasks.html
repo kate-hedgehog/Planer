@@ -1,6 +1,7 @@
 {%extends"base1.html"%}
 
 {% block content %}
+{%if current_user.is_authenticated %}
 <div class="row justify-content-center" style="margin-top: 1rem">
         <div class="col-lg-8" style="background-color:#ece7e5;border-radius: 20px">
             <h5 style="text-align: center;margin-top: 1rem">Добавление задачи</h5>
@@ -27,7 +28,7 @@
                     </p>
                     <p>
                         {{ form.data.label}}<br>
-                        {{ form.data(class="form-control") }}
+                        <input class="form-control" type="date" value="{{ form.data.data }}">
                         {%for error in form.data.errors %}
                         <div class="alert alert-danger" role="alert">
                             {{ error }}
@@ -67,5 +68,6 @@
                 </form>
         </div>
 </div>
+{% endif %}
 {% endblock %}
 

@@ -1,6 +1,6 @@
 from datetime import datetime, date, timedelta
 import calendar
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
 from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm
@@ -27,8 +27,9 @@ def load_user(user_id):
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     session = db_session.create_session()
-    form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == date.today().strftime("%d-%m-%Y"))
-    return render_template('index.html', title='Planer', form=form)
+    data = date.today().strftime("%d-%m-%Y")
+    form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data)
+    return render_template('index.html', title='Planer', form=form, data=data)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -69,10 +70,13 @@ def logout():
     return redirect("/")
 
 
-@app.route('/tasks', methods=['GET', 'POST'])
+@app.route('/tasks/<page>/<data>', methods=['GET', 'POST'])
 @login_required
-def add_tasks():
+def add_tasks(data, page):
     form = TasksForm()
+    if request.method == "GET":
+        data = datetime.strptime(data, '%d-%m-%Y').date()
+        form.data.data = data
     if form.validate_on_submit():
         session = db_session.create_session()
         tasks = models.tasks.Tasks()
@@ -86,7 +90,7 @@ def add_tasks():
         tasks.user = current_user
         session.merge(tasks)
         session.commit()
-        return redirect('/')
+        return redirect('/'+page)
     return render_template('tasks.html', title='Добавление Задачи', form=form)
 
 
@@ -95,8 +99,10 @@ def all_tasks():
     session = db_session.create_session()
     form = AllTasksForm()
     if form.validate_on_submit():
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == form.data_day.data.strftime("%d-%m-%Y"))
-        return render_template('alltasks.html', title='Planer', form=form, tasks=tasks)
+        data = form.data_day.data.strftime("%d-%m-%Y")
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data)
+
+        return render_template('alltasks.html', title='Planer', form=form, tasks=tasks, data=data)
     return render_template('alltasks.html', title='Planer', form=form)
 
 

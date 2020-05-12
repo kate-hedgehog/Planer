@@ -27,7 +27,7 @@ class TasksForm(FlaskForm):
     start_time = TimeField("Время начала", validators=[DataRequired()], format='%H:%M' )
     end_time = TimeField("Время окончания", validators=[DataRequired()], format='%H:%M')
     important = IntegerField("Важность", validators=[DataRequired()])
-    submit = SubmitField('Применить')
+    submit = SubmitField('Добавить')
 
 
 class AllTasksForm(FlaskForm):

@@ -1,6 +1,5 @@
 body{
     font-family: 'Quicksand', sans-serif;
-
 }
  a.c {
     border: 1px solid #e66e76; /* Рамка */
@@ -15,7 +14,13 @@ body{
     box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
     background: linear-gradient(to bottom, #dbadb0 0%, #db777d 100%); /* Градиент */
     color: #000;
-   }
+ }
+ a.tabl{
+     color: #000; /* Цвет текста */
+ }
+ a.tabl:hover{
+     color: #000;
+ }
  a.button {
     border: 1px solid #e66e76; /* Рамка */
     display: inline-block;
@@ -42,44 +47,44 @@ body{
     font-size: 20px;
     font-family: 'Quicksand', sans-serif;
   }
-.login:hover {
+  .login:hover {
     box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
     background: linear-gradient(to bottom, #dbadb0 0%, #db777d 100%);
     text-decoration: none;/* Градиент */
     color: #000;
    }
-.color{
+  .color{
     color: #e66e76;
     text-decoration: none;
     font-family: 'Quicksand', sans-serif;
     font-family: 'Modak', cursive;
     font-family: 'Indie Flower', cursive;
-}
-.color:hover{
+  }
+  .color:hover{
     color: #e66e76;
     text-decoration: none;
-}
-.logo{
+  }
+  .logo{
     float: left;
     width: 50%;
 
-}
-img.mainpic{
+  }
+ img.mainpic{
     width: 70%;
     margin-left: 9rem;
-}
-a.navbar{
+ }
+ a.navbar{
     color: #e66e76;
-}
-th{
+ }
+ th{
     color: #e66e76;
     text-align: center;
     width: 100px;
-}
-td{
+ }
+ td{
     width: 100px;
     height: 100px;
-}
+ }
 
 
 
