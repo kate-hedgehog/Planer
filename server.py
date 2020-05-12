@@ -152,7 +152,6 @@ def all_tasks():
     if form.validate_on_submit():
         data = form.data_day.data.strftime("%d-%m-%Y")
         tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data)
-
         return render_template('alltasks.html', title='Planer', form=form, tasks=tasks, data=data)
     return render_template('alltasks.html', title='Planer', form=form)
 
