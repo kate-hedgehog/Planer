@@ -31,17 +31,9 @@ class TasksForm(FlaskForm):
 
 
 class AllTasksForm(FlaskForm):
-    data =  DateField("Дата", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
-    submit = SubmitField('Показать')
-
-
-class AllTasksWeekForm(FlaskForm):
-    data =  DateField("Неделя с", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
-    submit = SubmitField('Показать')
-
-
-class AllTasksMonthForm(FlaskForm):
-    data =  DateField("Месяц с", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
+    data_day =  DateField("Дата", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
+    data_week = DateField("Неделя с", validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
+    data_month = DateField("Месяц с", validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
     submit = SubmitField('Показать')
 
 

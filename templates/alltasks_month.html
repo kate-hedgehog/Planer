@@ -40,8 +40,8 @@
                 {{ form.hidden_tag() }}
                 {{ form.csrf_token }}
                     <p>
-                        {{ form.data.label}}<br>
-                        {{ form.data(type="date", class="form-control") }}
+                        {{ form.data_month.label}}<br>
+                        {{ form.data_month(type="date", class="form-control") }}
                         {%for error in form.data.errors %}
                         <div class="alert alert-danger" role="alert">
                             {{ error }}
@@ -54,99 +54,239 @@
                 <p style="margin-top: 1rem; text-align: center; font-family: 'Quicksand', sans-serif;">{{message}}</p>
     </form>
 </div>
-<div class="col-lg-12">
-    <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
-    {%for item in tasks%}
-        {% if item.id_important == 1 %}
-            <div class="alert alert-danger" role="alert">
-                {{item.data}}
-                {{item.start_time}}
-                {{item.end_time}}
-                {{item.text_task}}
-                {{item.description}}
-            </div>
-        {% endif %}
-        {% if item.id_important == 2 %}
-            <div class="alert alert-warning" role="alert">
-                {{item.data}}
-                {{item.start_time}}
-                {{item.end_time}}
-                {{item.text_task}}
-                {{item.description}}
-            </div>
-        {% endif %}
-        {% if item.id_important == 3 %}
-            <div class="alert alert-success" role="alert">
-                {{item.data}}
-                {{item.start_time}}
-                {{item.end_time}}
-                {{item.text_task}}
-                {{item.description}}
-            </div>
-        {% endif %}
-    {% endfor %}
-</div>
 <div class="col-lg-12" style="margin-top: 1rem">
+    {%for item in tasks %}
+    {{  item.data}}
+    {% endfor %}
+    <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
     <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">Понедельник</th>
-      <th scope="col">Вторник</th>
-      <th scope="col">Среда</th>
-      <th scope="col">Четверг</th>
-      <th scope="col">Пятница</th>
-      <th scope="col">Суббота</th>
-      <th scope="col">Воскресенье</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+        <thead>
+            {%for key in first_week%}
+                    <th scope="col">
+                        {{ key }} <br>
+                    </th>
+            {% endfor %}
+        </thead>
+        <tbody>
+            <tr>
+                {%for key in first_week %}
+                        <td>
+                        {{ first_week[key]}}
+                        {%for item in tasks %}
+                             {{  item.data}}
+                            {% if first_week[key] == item.data %}
+
+                                {% if item.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {%for key2 in second_week %}
+                    <td>
+                        {{ second_week[key2]}}
+                    {%for item2 in tasks %}
+                        {{  item2.data}}
+                        {% if second_week[key2] == item2.data %}
+                                {% if item2.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item2.start_time}}
+                {{item2.end_time}}
+                {{item2.text_task}}
+                {{item2.description}}
+            </div>
+                                {% endif %}
+                                {% if item2.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item2.start_time}}
+                {{item2.end_time}}
+                {{item2.text_task}}
+                {{item2.description}}
+            </div>
+                                {% endif %}
+                                {% if item2.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item2.start_time}}
+                {{item2.end_time}}
+                {{item2.text_task}}
+                {{item2.description}}
+            </div>
+                                {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {%for key in third_week %}
+                    <td>
+                        {{ third_week[key]}}
+                    {%for item in tasks %}
+                        {% if third_week[key] == item.data %}
+                                {% if item.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {%for key in fourth_week %}
+                    <td>
+                        {{ fourth_week[key]}}
+                    {%for item in tasks %}
+                        {% if fourth_week[key] == item.data %}
+                                {% if item.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {%for key in fifth_week %}
+                    <td>
+                        {{ fifth_week[key]}}
+                    {%for item in tasks %}
+                        {% if fifth_week[key] == item.data %}
+                                {% if item.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {%for key in sixth_week %}
+                        <td>
+                        {{ sixth_week[key]}}
+                        {%for item in tasks %}
+                            {% if sixth_week[key] == item.data %}
+                                {% if item.id_important == 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 2 %}
+                                    <div class="alert alert-warning" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+                                {% if item.id_important == 3 %}
+                                    <div class="alert alert-success" role="alert">
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
+            </div>
+                                {% endif %}
+
+                            {% endif %}
+                        {% endfor %}
+                        </td>
+                {% endfor %}
+            </tr>
   </tbody>
-</table>
+    </table>
 </div>
 {%if current_user.is_authenticated %}
     <a href="/tasks"class="btn btn-secondary">Добавить запись</a>

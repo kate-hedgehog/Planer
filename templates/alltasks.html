@@ -40,8 +40,8 @@
                 {{ form.hidden_tag() }}
                 {{ form.csrf_token }}
                     <p>
-                        {{ form.data.label}}<br>
-                        {{ form.data(type="date", class="form-control") }}
+                        {{ form.data_day.label}}<br>
+                        {{ form.data_day(type="date", class="form-control") }}
                         {%for error in form.data.errors %}
                         <div class="alert alert-danger" role="alert">
                             {{ error }}

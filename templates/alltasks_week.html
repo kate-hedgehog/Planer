@@ -40,8 +40,8 @@
                 {{ form.hidden_tag() }}
                 {{ form.csrf_token }}
                     <p>
-                        {{ form.data.label}}<br>
-                        {{ form.data(type="date", class="form-control") }}
+                        {{ form.data_week.label}}<br>
+                        {{ form.data_week(type="date", class="form-control") }}
                         {%for error in form.data.errors %}
                         <div class="alert alert-danger" role="alert">
                             {{ error }}
@@ -72,8 +72,7 @@
                 {%for key in day_date %}
                     <td>
                     {%for item in tasks %}
-                        {% if key == item.day %}
-
+                        {% if day_date[key] == item.data %}
                                 {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
                 {{item.start_time}}
