@@ -22,7 +22,6 @@ class RegistrationForm(FlaskForm):
 
 class TasksForm(FlaskForm):
     text_task = StringField('Задача', validators=[DataRequired()])
-    description = StringField("Краткое описание")
     data =  DateField("Дата", validators=[DataRequired()], format='%d-%m-%Y' , default=datetime.today)
     start_time = TimeField("Время начала", validators=[DataRequired()], format='%H:%M' )
     end_time = TimeField("Время окончания", validators=[DataRequired()], format='%H:%M')

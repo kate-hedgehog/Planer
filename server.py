@@ -83,7 +83,6 @@ def add_tasks(data, page):
         session = db_session.create_session()
         tasks = models.tasks.Tasks()
         tasks.text_task = form.text_task.data
-        tasks.description = form.description.data
         tasks.data = form.data.data.strftime("%d-%m-%Y")
         tasks.start_time = form.start_time.data
         tasks.end_time = form.end_time.data
@@ -106,7 +105,6 @@ def change_tasks(id_task, page):
                                                          models.tasks.Tasks.user == current_user).first()
         if tasks:
             form.text_task.data = tasks.text_task
-            form.description.data = tasks.description
             data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
             form.data.data = data
             form.start_time.data = tasks.start_time

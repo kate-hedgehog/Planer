@@ -10,5 +10,3 @@ from . import books_tracker
 from . import films_tracker
 # noinspection PyUnresolvedReferences
 from . import water_tracker
-# noinspection PyUnresolvedReferences
-from . import execute
