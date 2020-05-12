@@ -1,6 +1,6 @@
 from datetime import datetime, date, timedelta
 import calendar
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
 from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm
@@ -26,6 +26,7 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    id = []
     session = db_session.create_session()
     data = date.today().strftime("%d-%m-%Y")
     form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data)
@@ -91,6 +92,43 @@ def add_tasks(data, page):
         session.merge(tasks)
         session.commit()
         return redirect('/'+page)
+    return render_template('tasks.html', title='Добавление Задачи', form=form)
+
+
+@app.route('/change_tasks/<page>/<id_task>', methods=['GET', 'POST'])
+@login_required
+def change_tasks(id_task, page):
+    form = TasksForm()
+    if request.method == "GET":
+        session = db_session.create_session()
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
+                                                         models.tasks.Tasks.user == current_user).first()
+        if tasks:
+            form.text_task.data = tasks.text_task
+            form.description.data = tasks.description
+            data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
+            form.data.data = data
+            form.start_time.data = tasks.start_time
+            form.end_time.data = tasks.end_time
+            form.important.data = tasks.id_important
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
+                                                         models.tasks.Tasks.user == current_user).first()
+        if tasks:
+            tasks.text_task = form.text_task.data
+            tasks.description = form.description.data
+            tasks.data = form.data.data.strftime("%d-%m-%Y")
+            tasks.start_time = form.start_time.data
+            tasks.end_time = form.end_time.data
+            tasks.id_important = form.important.data
+            tasks.day = DAY_RU[form.data.data.strftime('%A')]
+            session.commit()
+            return redirect('/'+page)
+        else:
+            abort(404)
     return render_template('tasks.html', title='Добавление Задачи', form=form)
 
 
