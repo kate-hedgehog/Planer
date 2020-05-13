@@ -179,6 +179,22 @@ def all_tasks_week():
     return render_template('alltasks_week.html', title='Planer', form=form, day_date=day_date)
 
 
+def data_from_database(count_days_start, count_days_end):
+    session = db_session.create_session()
+    form = AllTasksForm()
+    data = [session.query(models.tasks.Tasks)\
+            .filter(models.tasks.Tasks.data >= (form.data_month.data).strftime("%d-%m-%Y"))
+                    .filter(models.tasks.Tasks.data <= (form.data_month.data+ timedelta(days=count_days_start))
+                                                .strftime("%d-%m-%Y"))]
+    for i in range (count_days_start+1, count_days_end+1,7):
+        data += [session.query(models.tasks.Tasks)\
+            .filter(models.tasks.Tasks.data >= (form.data_month.data + timedelta(days=i))
+                                                .strftime("%d-%m-%Y"))
+                    .filter(models.tasks.Tasks.data <= (form.data_month.data+ timedelta(days=i+7))
+                                                .strftime("%d-%m-%Y"))]
+    return data
+
+
 @app.route('/alltasks_month', methods=['GET', 'POST'])
 def all_tasks_month():
     NUMBER_OF_DAY = {'Понедельник': 1, 'Вторник': 2, 'Среда': 3, 'Четверг': 4, 'Пятница': 5, 'Суббота': 6,
@@ -186,50 +202,48 @@ def all_tasks_month():
     first_week_for_out = {'Понедельник': '', 'Вторник': '', 'Среда': '', 'Четверг': '', 'Пятница': '', 'Суббота': '',
                           'Воскресенье': ''}
     first_week = []
-    second_week = {}
-    third_week = {}
-    fourth_week = {}
-    fifth_week = {}
-    sixth_week = {}
-    session = db_session.create_session()
+    second_week, third_week, fourth_week, fifth_week, sixth_week = {}, {}, {}, {}, {}
     form = AllTasksForm()
     if form.validate_on_submit():
         if form.data_month.data.day == 1:
             count_days = int(calendar.monthrange(form.data_month.data.year, form.data_month.data.month)[1])
         else:
             count_days = 31
-        tasks = session.query(models.tasks.Tasks)\
-            .filter(models.tasks.Tasks.data >= form.data_month.data.strftime("%d-%m-%Y"))\
-            .filter(models.tasks.Tasks.data <= (form.data_month.data + timedelta(days=25)).strftime("%d-%m-%Y"))
-        tasks2 = session.query(models.tasks.Tasks)\
-            .filter(models.tasks.Tasks.data >= (form.data_month.data + timedelta(days=26)).strftime("%d-%m-%Y")) \
-            .filter(models.tasks.Tasks.data <= (form.data_month.data + timedelta(days=count_days)).strftime("%d-%m-%Y"))
-        first = 8 - NUMBER_OF_DAY[DAY_RU[form.data_month.data.strftime('%A')]]
+        count_days_firstweek = 8 - NUMBER_OF_DAY[DAY_RU[form.data_month.data.strftime('%A')]]
+        if len(data_from_database(count_days_firstweek, count_days)) == 4:
+            tasks_week1, tasks_week2, tasks_week3, tasks_week4 = data_from_database(count_days_firstweek, count_days)
+            tasks_week5, tasks_week6 = '',''
+        elif len(data_from_database(count_days_firstweek, count_days)) == 5:
+            tasks_week1, tasks_week2, tasks_week3, tasks_week4, tasks_week5 = \
+                data_from_database(count_days_firstweek, count_days)
+            tasks_week6 = '', ''
+        else:
+            tasks_week1, tasks_week2, tasks_week3, tasks_week4, tasks_week5, tasks_week6 = \
+                data_from_database(count_days_firstweek, count_days)
         for i in range(count_days):
-            if i < first:
+            if i < count_days_firstweek:
                 first_week += [(DAY_RU[(form.data_month.data + timedelta(days=i)).strftime('%A')],
                                 (form.data_month.data + timedelta(days=i)).strftime("%d-%m-%Y"))]
-            elif first <= i < first+7:
+            elif count_days_firstweek <= i < count_days_firstweek+7:
                 second_week[DAY_RU[(form.data_month.data + timedelta(days=i)).strftime('%A')]] = \
                     (form.data_month.data + timedelta(days=i)).strftime("%d-%m-%Y")
-            elif first+7 <= i < first+14:
+            elif count_days_firstweek+7 <= i < count_days_firstweek+14:
                 third_week[DAY_RU[(form.data_month.data + timedelta(days=i)).strftime('%A')]] = \
                     (form.data_month.data + timedelta(days=i)).strftime("%d-%m-%Y")
-            elif first+14 <= i < first+21:
+            elif count_days_firstweek+14 <= i < count_days_firstweek+21:
                 fourth_week[DAY_RU[(form.data_month.data + timedelta(days=i)).strftime('%A')]] = \
                     (form.data_month.data + timedelta(days=i)).strftime("%d-%m-%Y")
-            elif first+21 <= i < first+28:
+            elif count_days_firstweek+21 <= i < count_days_firstweek+28:
                 fifth_week[DAY_RU[(form.data_month.data + timedelta(days=i)).strftime('%A')]] = \
                     (form.data_month.data + timedelta(days=i)).strftime("%d-%m-%Y")
             else:
                 sixth_week[DAY_RU[(form.data_month.data + timedelta(days=i)).strftime('%A')]] = \
                     (form.data_month.data + timedelta(days=i)).strftime("%d-%m-%Y")
         first_week_for_out.update(first_week)
-        for item in tasks:
-            print(item.data)
-        for item in tasks2:
-            print(item.data)
-        return render_template('alltasks_month.html', title='Planer', form=form, tasks=tasks,
+        return render_template('alltasks_month.html', title='Planer', form=form, tasks_week1=tasks_week1,
+                               tasks_week2=tasks_week2, tasks_week3=tasks_week3,tasks_week4=tasks_week4,
+                               tasks_week5=tasks_week5,
+                               tasks_week6=tasks_week6,
                                first_week = first_week_for_out,second_week = second_week, third_week = third_week,
                                fourth_week = fourth_week, fifth_week = fifth_week, sixth_week = sixth_week)
     return render_template('alltasks_month.html', title='Planer', form=form)

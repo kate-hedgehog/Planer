@@ -54,9 +54,6 @@
     </form>
 </div>
 <div class="col-lg-12" style="margin-top: 1rem">
-    {%for item in tasks %}
-    {{  item.data}}
-    {% endfor %}
     <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
     <table class="table table-bordered">
         <thead>
@@ -69,10 +66,9 @@
         <tbody>
             <tr>
                 {%for key in first_week %}
-                        <td>
-                        {{ first_week[key]}}
-                        {%for item in tasks %}
-                             {{  item.data}}
+                        <td style="text-align: center">
+                        <a href="/tasks/alltasks_month/{{ first_week[key]}}" class = "tabl">{{ first_week[key]}}</a>
+                        {%for item in tasks_week1 %}
                             {% if first_week[key] == item.data %}
 
                                 {% if item.id_important == 1 %}
@@ -99,19 +95,35 @@
                 {{item.description}}
             </div>
                                 {% endif %}
+                                 <div style="margin-bottom: 5px;">
+                                    <a href="/delete_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                    <a href="/change_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                </div>
                             {% endif %}
                         {% endfor %}
                         </td>
                 {% endfor %}
             </tr>
             <tr>
-                {%for key2 in second_week %}
-                    <td>
-                        {{ second_week[key2]}}
-                    {%for item2 in tasks %}
-                        {{  item2.data}}
-                        {% if second_week[key2] == item2.data %}
-                                {% if item2.id_important == 1 %}
+                {%for key in second_week %}
+                    <td style="text-align: center">
+                        <a href="/tasks/alltasks_month/{{ second_week[key]}}" class = "tabl">{{ second_week[key] }}</a>
+                    {%for item in tasks_week2 %}
+                        {% if second_week[key] == item.data %}
+                                {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
                 {{item2.start_time}}
                 {{item2.end_time}}
@@ -119,22 +131,39 @@
                 {{item2.description}}
             </div>
                                 {% endif %}
-                                {% if item2.id_important == 2 %}
+                                {% if item.id_important == 2 %}
                                     <div class="alert alert-warning" role="alert">
-                {{item2.start_time}}
-                {{item2.end_time}}
-                {{item2.text_task}}
-                {{item2.description}}
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
             </div>
                                 {% endif %}
-                                {% if item2.id_important == 3 %}
+                                {% if item.id_important == 3 %}
                                     <div class="alert alert-success" role="alert">
-                {{item2.start_time}}
-                {{item2.end_time}}
-                {{item2.text_task}}
-                {{item2.description}}
+                {{item.start_time}}
+                {{item.end_time}}
+                {{item.text_task}}
+                {{item.description}}
             </div>
                                 {% endif %}
+                                <div style="margin-bottom: 5px;">
+                                    <a href="/delete_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                    <a href="/change_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                </div>
                         {% endif %}
                     {% endfor %}
                     </td>
@@ -142,9 +171,9 @@
             </tr>
             <tr>
                 {%for key in third_week %}
-                    <td>
-                        {{ third_week[key]}}
-                    {%for item in tasks %}
+                    <td style="text-align: center">
+                        <a href="/tasks/alltasks_month/{{ third_week[key] }}" class = "tabl">{{ third_week[key] }}</a>
+                    {%for item in tasks_week3 %}
                         {% if third_week[key] == item.data %}
                                 {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
@@ -170,7 +199,23 @@
                 {{item.description}}
             </div>
                                 {% endif %}
-
+                                <div style="margin-bottom: 5px;">
+                                    <a href="/delete_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                    <a href="/change_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                </div>
                         {% endif %}
                     {% endfor %}
                     </td>
@@ -178,9 +223,9 @@
             </tr>
             <tr>
                 {%for key in fourth_week %}
-                    <td>
-                        {{ fourth_week[key]}}
-                    {%for item in tasks %}
+                    <td style="text-align: center">
+                        <a href="/tasks/alltasks_month/{{ fourth_week[key] }}" class = "tabl">{{ fourth_week[key] }}</a>
+                    {%for item in tasks_week4 %}
                         {% if fourth_week[key] == item.data %}
                                 {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
@@ -206,7 +251,23 @@
                 {{item.description}}
             </div>
                                 {% endif %}
-
+                                <div style="margin-bottom: 5px;">
+                                    <a href="/delete_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                    <a href="/change_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                </div>
                         {% endif %}
                     {% endfor %}
                     </td>
@@ -214,9 +275,9 @@
             </tr>
             <tr>
                 {%for key in fifth_week %}
-                    <td>
-                        {{ fifth_week[key]}}
-                    {%for item in tasks %}
+                    <td style="text-align: center">
+                        <a href="/tasks/alltasks_month/{{ fifth_week[key] }}" class = "tabl">{{ fifth_week[key] }}</a>
+                    {%for item in tasks_week5 %}
                         {% if fifth_week[key] == item.data %}
                                 {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
@@ -242,7 +303,23 @@
                 {{item.description}}
             </div>
                                 {% endif %}
-
+                                <div style="margin-bottom: 5px;">
+                                    <a href="/delete_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                    <a href="/change_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                </div>
                         {% endif %}
                     {% endfor %}
                     </td>
@@ -250,9 +327,9 @@
             </tr>
             <tr>
                 {%for key in sixth_week %}
-                        <td>
-                        {{ sixth_week[key]}}
-                        {%for item in tasks %}
+                        <td style="text-align: center">
+                        <a href="/tasks/alltasks_month/{{ sixth_week[key] }}" class = "tabl">{{ sixth_week[key] }}</a>
+                        {%for item in tasks_week6 %}
                             {% if sixth_week[key] == item.data %}
                                 {% if item.id_important == 1 %}
                                     <div class="alert alert-danger" role="alert">
@@ -278,7 +355,23 @@
                 {{item.description}}
             </div>
                                 {% endif %}
-
+                                <div style="margin-bottom: 5px;">
+                                    <a href="/delete_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                    <a href="/change_tasks/alltasks_month/{{item.id_task}}" class="c">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+                                </div>
                             {% endif %}
                         {% endfor %}
                         </td>
