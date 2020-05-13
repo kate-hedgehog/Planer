@@ -86,6 +86,7 @@ def add_tasks(data, page):
         tasks.data = form.data.data.strftime("%d-%m-%Y")
         tasks.start_time = form.start_time.data
         tasks.end_time = form.end_time.data
+
         tasks.id_important = form.important.data
         tasks.day = DAY_RU[form.data.data.strftime('%A')]
         tasks.user = current_user
@@ -110,6 +111,7 @@ def change_tasks(id_task, page):
             form.start_time.data = tasks.start_time
             form.end_time.data = tasks.end_time
             form.important.data = tasks.id_important
+            print(form.important.data)
         else:
             abort(404)
     if form.validate_on_submit():
@@ -118,17 +120,15 @@ def change_tasks(id_task, page):
                                                          models.tasks.Tasks.user == current_user).first()
         if tasks:
             tasks.text_task = form.text_task.data
-            tasks.description = form.description.data
             tasks.data = form.data.data.strftime("%d-%m-%Y")
             tasks.start_time = form.start_time.data
             tasks.end_time = form.end_time.data
             tasks.id_important = form.important.data
-            tasks.day = DAY_RU[form.data.data.strftime('%A')]
             session.commit()
             return redirect('/'+page)
         else:
             abort(404)
-    return render_template('tasks.html', title='Добавление Задачи', form=form)
+    return render_template('tasks.html', title='Изменение Задачи', form=form)
 
 
 @app.route('/delete_tasks/<page>/<id_task>', methods=['GET', 'POST'])

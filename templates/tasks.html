@@ -45,11 +45,36 @@
                         {% endfor %}
                     </p>
                     <p>
-                        {{ form.important.label }}
+                        {{ form.important.label}}<br>
+
                         <div class="form-check form-check-inline">
-                        {{ form.important(class="form-check-input", type="radio", value=1) }}
-                        {{ form.important(class="form-check-input", type="radio", value=2) }}
-                        {{ form.important(class="form-check-input", type="radio", value=3) }}
+                        {% if form.important.data == 1 %}
+                            {{ form.important(class="form-check-input", type="radio", value=1, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.important(class="form-check-input", type="radio", value=1,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <img src="{{ url_for('static', filename='img/green.gif') }}" alt="альтернативный текст">
+                        <span style="margin-right: 3px">Низкий</span>
+                        {% if form.important.data == 2 %}
+                            {{ form.important(class="form-check-input", type="radio", value=2, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.important(class="form-check-input", type="radio", value=2,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <img src="{{ url_for('static', filename='img/yellow.gif') }}" alt="альтернативный текст">
+                        <span style="margin-right: 3px">Средний</span>
+                        {% if form.important.data == 3 %}
+                            {{ form.important(class="form-check-input", type="radio", value=3, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.important(class="form-check-input", type="radio", value=3,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <img src="{{ url_for('static', filename='img/red.gif') }}" alt="альтернативный текст">
+                        <span style="margin-right: 3px">Высокий</span>
                         </div>
                     </p>
                     <p style="text-align:center">
