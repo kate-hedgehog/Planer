@@ -299,7 +299,29 @@ def delete_film_tracker(id_film):
     return redirect('/')
 
 
-
+@app.route('/change_film_tracker/<id_film>', methods=['GET', 'POST'])
+@login_required
+def change_film_tracker(id_film):
+    form = AddTrackFilms()
+    session = db_session.create_session()
+    films = session.query(models.films_tracker.Films_tracker). \
+        filter(models.films_tracker.Films_tracker.id_films_tracker == id_film,
+               models.films_tracker.Films_tracker.user == current_user).first()
+    if request.method == "GET":
+        if films:
+            form.name.data = films.name
+            form.evalution.data = films.evaluation
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        if films:
+            films.name = form.name.data
+            films.evaluation = form.evalution.data
+            session.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('add_track_films.html', title='Изменение Фильма', form=form)
 
 
 def main():
