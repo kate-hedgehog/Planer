@@ -44,6 +44,12 @@ class AddTrackBooks(FlaskForm):
     submit = SubmitField('Применить')
 
 
+class AddTrackFilms(FlaskForm):
+    name = StringField('Название', validators=[DataRequired()])
+    evalution = IntegerField("Оценка", validators=[DataRequired()])
+    submit = SubmitField('Применить')
+
+
 
 
 

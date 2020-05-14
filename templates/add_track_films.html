@@ -1,0 +1,74 @@
+{%extends"base1.html"%}
+
+{% block content %}
+{%if current_user.is_authenticated %}
+<div class="row justify-content-center" style="margin-top: 1rem">
+        <div class="col-lg-8" style="background-color:#ece7e5;border-radius: 20px">
+            <h5 style="text-align: center;margin-top: 1rem">{{ title }}</h5>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token }}
+                    <p>
+                        {{ form.name.label}}<br>
+                        {{ form.name(class="form-control")}}
+                        {%for error in form.name.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.evalution.label}}<br>
+
+                        <div class="form-check form-check-inline">
+                        {% if form.evalution.data == 1 %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=1, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=1,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <span style="margin-right: 10px">1</span>
+                        {% if form.evalution.data == 2 %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=2, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=2,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <span style="margin-right: 10px">2</span>
+                        {% if form.evalution.data == 3 %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=3, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=3,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <span style="margin-right: 10px">3</span>
+                        {% if form.evalution.data == 4 %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=4, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=4,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <span style="margin-right: 10px">4</span>
+                        {% if form.evalution.data == 5 %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=5, checked="checked",
+                                                                                        style="margin-right: 1px") }}
+                        {% else %}
+                            {{ form.evalution(class="form-check-input", type="radio", value=5,
+                                                                                        style="margin-right: 1px") }}
+                        {% endif%}
+                        <span style="margin-right: 10px">5</span>
+                        </div>
+                    </p>
+                    <p style="text-align:center">
+                        {{ form.submit(type="submit",class="login") }}
+                    </p>
+                <p style="margin-top: 1rem; text-align: center; font-family: 'Quicksand', sans-serif;">{{message}}</p>
+                </form>
+        </div>
+</div>
+{% endif %}
+{% endblock %}

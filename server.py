@@ -3,7 +3,7 @@ import calendar
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
-from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm, AddTrackBooks
+from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm, AddTrackBooks, AddTrackFilms
 from data.db_session import __all_models as models
 
 now = datetime.today().strftime("%Y-%d-%m")
@@ -190,7 +190,7 @@ def all_tasks_week(data):
 
 @app.route('/trackers', methods=['GET', 'POST'])
 def all_trackers():
-    trackers = ('Трекер книг','Трекер фильмов', 'Трекер питья воды')
+    trackers = {'Трекер книг': 'book','Трекер фильмов': 'film'}
     return render_template('trackers.html', title='Planer', head = 'Трекеры', trackers=trackers)
 
 
@@ -261,6 +261,21 @@ def change_book_tracker(id_book):
             abort(404)
     return render_template('add_track_books.html', title='Изменение Книги', form=form)
 
+
+@app.route('/add_film_tracker', methods=['GET', 'POST'])
+@login_required
+def add_track_films():
+    form = AddTrackFilms()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        films_tracker = models.films_tracker.Films_tracker()
+        films_tracker.name = form.name.data
+        films_tracker.evaluation = form.evalution.data
+        films_tracker.user = current_user
+        session.merge(films_tracker)
+        session.commit()
+        return redirect('/')
+    return render_template('add_track_films.html', title='Добавление фильма', form=form)
 
 def main():
     app.run()
