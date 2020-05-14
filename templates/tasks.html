@@ -19,7 +19,7 @@
                     </p>
                     <p>
                         {{ form.data.label}}<br>
-                        <input class="form-control" type="date" value="{{ form.data.data }}">
+                        {{ form.data(class="form-control", type="date")}}
                         {%for error in form.data.errors %}
                         <div class="alert alert-danger" role="alert">
                             {{ error }}
