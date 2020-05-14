@@ -26,7 +26,6 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    id = []
     session = db_session.create_session()
     data = date.today().strftime("%d-%m-%Y")
     form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data).\
@@ -75,6 +74,7 @@ def logout():
 @app.route('/tasks/<page>/<data>', methods=['GET', 'POST'])
 @login_required
 def add_tasks(data, page):
+    time_error = ''
     form = TasksForm()
     if request.method == "GET":
         data = datetime.strptime(data, '%d-%m-%Y').date()
@@ -83,17 +83,14 @@ def add_tasks(data, page):
         session = db_session.create_session()
         tasks = models.tasks.Tasks()
         tasks.text_task = form.text_task.data
-        tasks.data = form.data.data.strftime("%d-%m-%Y")
+        tasks.data = form.data.data.strftime('%d-%m-%Y')
         tasks.start_time = form.start_time.data
-        tasks.end_time = form.end_time.data
-
         tasks.id_important = form.important.data
-        tasks.day = DAY_RU[form.data.data.strftime('%A')]
         tasks.user = current_user
         session.merge(tasks)
         session.commit()
         return redirect('/'+page)
-    return render_template('tasks.html', title='Добавление Задачи', form=form)
+    return render_template('tasks.html', title='Добавление Задачи', form=form, time_error=time_error)
 
 
 @app.route('/change_tasks/<page>/<id_task>', methods=['GET', 'POST'])
@@ -109,7 +106,6 @@ def change_tasks(id_task, page):
             data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
             form.data.data = data
             form.start_time.data = tasks.start_time
-            form.end_time.data = tasks.end_time
             form.important.data = tasks.id_important
             print(form.important.data)
         else:
@@ -122,7 +118,6 @@ def change_tasks(id_task, page):
             tasks.text_task = form.text_task.data
             tasks.data = form.data.data.strftime("%d-%m-%Y")
             tasks.start_time = form.start_time.data
-            tasks.end_time = form.end_time.data
             tasks.id_important = form.important.data
             session.commit()
             return redirect('/'+page)

@@ -36,15 +36,6 @@
                         {% endfor %}
                     </p>
                     <p>
-                        {{ form.end_time.label}}<br>
-                        {{ form.end_time(class="form-control", type="time") }}
-                        {%for error in form.end_time.errors %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ error }}
-                        </div>
-                        {% endfor %}
-                    </p>
-                    <p>
                         {{ form.important.label}}<br>
 
                         <div class="form-check form-check-inline">
@@ -55,8 +46,8 @@
                             {{ form.important(class="form-check-input", type="radio", value=1,
                                                                                         style="margin-right: 1px") }}
                         {% endif%}
-                        <img src="{{ url_for('static', filename='img/green.gif') }}" alt="альтернативный текст">
-                        <span style="margin-right: 3px">Низкий</span>
+                        <img src="{{ url_for('static', filename='img/red.gif') }}" alt="альтернативный текст">
+                        <span style="margin-right: 3px">Высокий</span>
                         {% if form.important.data == 2 %}
                             {{ form.important(class="form-check-input", type="radio", value=2, checked="checked",
                                                                                         style="margin-right: 1px") }}
@@ -73,8 +64,8 @@
                             {{ form.important(class="form-check-input", type="radio", value=3,
                                                                                         style="margin-right: 1px") }}
                         {% endif%}
-                        <img src="{{ url_for('static', filename='img/red.gif') }}" alt="альтернативный текст">
-                        <span style="margin-right: 3px">Высокий</span>
+                        <img src="{{ url_for('static', filename='img/green.gif') }}" alt="альтернативный текст">
+                        <span style="margin-right: 3px">Низкий</span>
                         </div>
                     </p>
                     <p style="text-align:center">
