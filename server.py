@@ -26,22 +26,28 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    count = 0
+    count_book, count_film = 0, 0
     session = db_session.create_session()
     data = date.today().strftime("%d-%m-%Y")
     NAME_TRACK_BOOKS = ('Название', 'Автор', 'Краткое описание', 'Дата начала', 'Дата окончания', 'Оценка')
+    NAME_TRACK_FILMS = ('Название', 'Оценка')
     form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data,
                                                     models.tasks.Tasks.user == current_user).\
         order_by(models.tasks.Tasks.start_time)
     books = session.query(models.books_tracker.Books_tracker).\
         filter(models.books_tracker.Books_tracker.user == current_user).\
         order_by(models.books_tracker.Books_tracker.start_date)
+    films = session.query(models.films_tracker.Films_tracker).\
+        filter(models.films_tracker.Films_tracker.user == current_user)
     for item in books:
-        count = 1
+        count_book = 1
         break
-
-    return render_template('index.html', title='Planer', form=form, books=books,name_track_books=NAME_TRACK_BOOKS,
-                           data=data, count=count)
+    for item in films:
+        count_film = 1
+        break
+    return render_template('index.html', title='Planer', form=form, books=books, films=films,
+                           name_track_books=NAME_TRACK_BOOKS, name_track_films=NAME_TRACK_FILMS,
+                           data=data, count_book=count_book, count_film=count_film)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -220,7 +226,7 @@ def delete_book_tracker(id_book):
     session = db_session.create_session()
     books = session.query(models.books_tracker.Books_tracker).\
         filter(models.books_tracker.Books_tracker.id_books_tracker == id_book,
-                                                     models.tasks.Tasks.user == current_user).first()
+                                                     models.books_tracker.Books_tracker.user == current_user).first()
     if books:
         session.delete(books)
         session.commit()
@@ -276,6 +282,25 @@ def add_track_films():
         session.commit()
         return redirect('/')
     return render_template('add_track_films.html', title='Добавление фильма', form=form)
+
+
+@app.route('/delete_film_tracker/<id_film>', methods=['GET', 'POST'])
+@login_required
+def delete_film_tracker(id_film):
+    session = db_session.create_session()
+    films = session.query(models.films_tracker.Films_tracker).\
+        filter(models.films_tracker.Films_tracker.id_films_tracker == id_film,
+                                                     models.films_tracker.Films_tracker.user == current_user).first()
+    if films:
+        session.delete(films)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
+
+
+
 
 def main():
     app.run()
