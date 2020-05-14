@@ -26,6 +26,7 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    count = 0
     session = db_session.create_session()
     data = date.today().strftime("%d-%m-%Y")
     NAME_TRACK_BOOKS = ('Название', 'Автор', 'Краткое описание', 'Дата начала', 'Дата окончания', 'Оценка')
@@ -35,8 +36,12 @@ def index():
     books = session.query(models.books_tracker.Books_tracker).\
         filter(models.books_tracker.Books_tracker.user == current_user).\
         order_by(models.books_tracker.Books_tracker.start_date)
+    for item in books:
+        count = 1
+        break
+
     return render_template('index.html', title='Planer', form=form, books=books,name_track_books=NAME_TRACK_BOOKS,
-                           data=data)
+                           data=data, count=count)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -211,6 +216,54 @@ def add_track_books():
         session.commit()
         return redirect('/')
     return render_template('add_track_books.html', title='Добавление книги', form=form)
+
+
+@app.route('/delete_book_tracker/<id_book>', methods=['GET', 'POST'])
+@login_required
+def delete_book_tracker(id_book):
+    session = db_session.create_session()
+    books = session.query(models.books_tracker.Books_tracker).\
+        filter(models.books_tracker.Books_tracker.id_books_tracker == id_book,
+                                                     models.tasks.Tasks.user == current_user).first()
+    if books:
+        session.delete(books)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
+
+@app.route('/change_book_tracker/<id_book>', methods=['GET', 'POST'])
+@login_required
+def change_book_tracker(id_task, page, data):
+    form = TasksForm()
+    if request.method == "GET":
+        session = db_session.create_session()
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
+                                                         models.tasks.Tasks.user == current_user).first()
+        if tasks:
+            form.text_task.data = tasks.text_task
+            data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
+            form.data.data = data
+            form.start_time.data = tasks.start_time
+            form.important.data = tasks.id_important
+            print(form.important.data)
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
+                                                         models.tasks.Tasks.user == current_user).first()
+        if tasks:
+            tasks.text_task = form.text_task.data
+            tasks.data = form.data.data.strftime("%d-%m-%Y")
+            tasks.start_time = form.start_time.data
+            tasks.id_important = form.important.data
+            session.commit()
+            return redirect('/'+page+'/'+data)
+        else:
+            abort(404)
+    return render_template('tasks.html', title='Изменение Задачи', form=form)
 
 
 def main():
