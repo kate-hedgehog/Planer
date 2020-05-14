@@ -105,23 +105,19 @@ def add_tasks(page, data):
 @login_required
 def change_tasks(id_task, page, data):
     form = TasksForm()
+    session = db_session.create_session()
+    tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
+                                                     models.tasks.Tasks.user == current_user).first()
     if request.method == "GET":
-        session = db_session.create_session()
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
-                                                         models.tasks.Tasks.user == current_user).first()
         if tasks:
             form.text_task.data = tasks.text_task
             data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
             form.data.data = data
             form.start_time.data = tasks.start_time
             form.important.data = tasks.id_important
-            print(form.important.data)
         else:
             abort(404)
     if form.validate_on_submit():
-        session = db_session.create_session()
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
-                                                         models.tasks.Tasks.user == current_user).first()
         if tasks:
             tasks.text_task = form.text_task.data
             tasks.data = form.data.data.strftime("%d-%m-%Y")
@@ -235,35 +231,35 @@ def delete_book_tracker(id_book):
 
 @app.route('/change_book_tracker/<id_book>', methods=['GET', 'POST'])
 @login_required
-def change_book_tracker(id_task, page, data):
-    form = TasksForm()
+def change_book_tracker(id_book):
+    form = AddTrackBooks()
+    session = db_session.create_session()
+    books = session.query(models.books_tracker.Books_tracker). \
+        filter(models.books_tracker.Books_tracker.id_books_tracker == id_book,
+               models.books_tracker.Books_tracker.user == current_user).first()
     if request.method == "GET":
-        session = db_session.create_session()
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
-                                                         models.tasks.Tasks.user == current_user).first()
-        if tasks:
-            form.text_task.data = tasks.text_task
-            data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
-            form.data.data = data
-            form.start_time.data = tasks.start_time
-            form.important.data = tasks.id_important
-            print(form.important.data)
+        if books:
+            form.author.data = books.author
+            form.name.data = books.name
+            form.start_date.data = datetime.strptime(books.start_date, '%d-%m-%Y').date()
+            form.end_date.data = datetime.strptime(books.end_date, '%d-%m-%Y').date()
+            form.short_description.data = books.short_description
+            form.evalution.data = books.evaluation
         else:
             abort(404)
     if form.validate_on_submit():
-        session = db_session.create_session()
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
-                                                         models.tasks.Tasks.user == current_user).first()
-        if tasks:
-            tasks.text_task = form.text_task.data
-            tasks.data = form.data.data.strftime("%d-%m-%Y")
-            tasks.start_time = form.start_time.data
-            tasks.id_important = form.important.data
+        if books:
+            books.author = form.author.data
+            books.name = form.name.data
+            books.start_date = form.start_date.data.strftime('%d-%m-%Y')
+            books.end_date = form.end_date.data.strftime('%d-%m-%Y')
+            books.short_description = form.short_description.data
+            books.evaluation = form.evalution.data
             session.commit()
-            return redirect('/'+page+'/'+data)
+            return redirect('/')
         else:
             abort(404)
-    return render_template('tasks.html', title='Изменение Задачи', form=form)
+    return render_template('add_track_books.html', title='Изменение Книги', form=form)
 
 
 def main():
