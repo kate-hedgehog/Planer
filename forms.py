@@ -22,31 +22,31 @@ class RegistrationForm(FlaskForm):
 
 class TasksForm(FlaskForm):
     text_task = StringField('Задача', validators=[DataRequired()])
-    data =  DateField("Дата", validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
-    start_time = TimeField("Время начала", validators=[DataRequired()], format='%H:%M')
-    important = IntegerField("Приоритет", validators=[DataRequired()])
+    data =  DateField('Дата', validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
+    start_time = TimeField('Время начала', validators=[DataRequired()], format='%H:%M')
+    important = IntegerField('Приоритет', validators=[DataRequired()])
     submit = SubmitField('Применить')
 
 
 class AllTasksForm(FlaskForm):
-    data_day =  DateField("Дата", validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
-    data_week = DateField("Неделя с", validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
+    data_day =  DateField('Дата', validators=[DataRequired()], format='%Y-%m-%d' , default=datetime.today)
+    data_week = DateField('Неделя с', validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
     submit = SubmitField('Показать')
 
 
 class AddTrackBooks(FlaskForm):
     author = StringField('Автор', validators=[DataRequired()])
     name = StringField('Название', validators=[DataRequired()])
-    start_date = DateField("Дата начала чтения", validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
-    end_date = DateField("Дата окончания чтения", validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
+    start_date = DateField('Дата начала чтения', validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
+    end_date = DateField('Дата окончания чтения', validators=[DataRequired()], format='%Y-%m-%d', default=datetime.today)
     short_description = StringField('Краткое описание')
-    evalution = IntegerField("Оценка", validators=[DataRequired()])
+    evalution = IntegerField('Оценка', validators=[DataRequired()])
     submit = SubmitField('Применить')
 
 
 class AddTrackFilms(FlaskForm):
     name = StringField('Название', validators=[DataRequired()])
-    evalution = IntegerField("Оценка", validators=[DataRequired()])
+    evalution = IntegerField('Оценка', validators=[DataRequired()])
     submit = SubmitField('Применить')
 
 

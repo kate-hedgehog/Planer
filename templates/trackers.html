@@ -24,20 +24,23 @@
 <div class="animate__animated animate__pulse" style="margin-top: 1rem">
     {% for key in trackers%}
         <div class="row justify-content-center">
-    <div class="col-lg-4" style="margin-left: 13rem; margin-top: 4px">
-        {{ key }}
-    </div>
-    <div class="col-lg-4">
-        <a href="/add_{{ trackers[key] }}_tracker" class="c" style="margin-bottom: 2px">
-            <span style="font-family: Quicksand, sans-serif;">
-                <svg class="bi bi-plus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
-                  <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd"/>
-                </svg>
-            </span>
-        </a>
-    </div>
-    </div>
+            <div class="col-lg-4" style="margin-left: 13rem; margin-top: 4px">
+                {{ key }}
+            </div>
+            <div class="col-lg-4">
+                <a href="/add_{{ trackers[key] }}_tracker" class="c" style="margin-bottom: 2px">
+                    <span style="font-family: Quicksand, sans-serif;">
+                        <svg class="bi bi-plus" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5
+                            0 01.5-.5z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}
