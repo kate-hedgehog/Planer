@@ -52,7 +52,7 @@
     <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
     <div  style="text-align: center"><a href="/tasks/alltasks/{{ data }}" class = "tabl">{{ data }}</a></div>
 </div>
-<div class="row justify-content-center" style="margin-top: 1rem">
+<div class="row justify-content-center  animate__animated animate__pulse" style="margin-top: 1rem">
     {%for item in tasks%}
     <div class="col-lg-8">
         {% if item.id_important == 1 %}

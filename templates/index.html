@@ -21,7 +21,7 @@
             <h5 style="margin-top: 1rem; text-align: center">Задачи</h5>
             <div  style="text-align: center"><a href="/tasks/index/{{ data }}" class = "tabl">{{ data }}</a></div>
        </div>
-        <div class="row justify-content-center" style="margin-top: 1rem">
+        <div class="row justify-content-center animate__animated animate__pulse" style="margin-top: 1rem">
             {%for item in tasks%}
             <div class="col-lg-8">
                 {% if item.id_important == 1 %}
@@ -66,6 +66,7 @@
 <div class="col-lg-12" style="margin-top: 1rem">
     {% if count_book %}
     <h5 style="margin-top: 1rem; text-align: center">Трекер книг</h5>
+    <div class="col-lg-12 animate__animated animate__pulse">
     <table class="table table-bordered">
         <thead>
                 <tr>
@@ -124,11 +125,13 @@
 
   </tbody>
     </table>
+    </div>
     {% endif %}
 </div>
 <div class="col-lg-12" style="margin-top: 1rem">
     {% if count_film %}
     <h5 style="margin-top: 1rem; text-align: center">Трекер фильмов</h5>
+    <div class="col-lg-12 animate__animated animate__pulse">
     <table class="table table-bordered">
         <thead>
             <tr>
