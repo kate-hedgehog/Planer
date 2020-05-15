@@ -1,14 +1,11 @@
 from datetime import datetime, date, timedelta
-import calendar
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
 from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm, AddTrackBooks, AddTrackFilms
 from data.db_session import __all_models as models
 
-now = datetime.today().strftime("%Y-%d-%m")
-DAY_RU = {'Monday': 'Понедельник', 'Tuesday': 'Вторник', 'Wednesday': 'Среда', 'Thursday': 'Четверг',
-          'Friday': 'Пятница', 'Saturday': 'Суббота', 'Sunday': 'Воскресенье'}
+NOW = date.today().strftime("%d-%m-%Y")
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -26,28 +23,31 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    count_book, count_film = 0, 0
-    session = db_session.create_session()
-    data = date.today().strftime("%d-%m-%Y")
-    NAME_TRACK_BOOKS = ('Название', 'Автор', 'Краткое описание', 'Дата начала', 'Дата окончания', 'Оценка')
-    NAME_TRACK_FILMS = ('Название', 'Оценка')
-    form = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data,
-                                                    models.tasks.Tasks.user == current_user).\
-        order_by(models.tasks.Tasks.start_time)
-    books = session.query(models.books_tracker.Books_tracker).\
-        filter(models.books_tracker.Books_tracker.user == current_user).\
-        order_by(models.books_tracker.Books_tracker.start_date)
-    films = session.query(models.films_tracker.Films_tracker).\
-        filter(models.films_tracker.Films_tracker.user == current_user)
-    for item in books:
-        count_book = 1
-        break
-    for item in films:
-        count_film = 1
-        break
-    return render_template('index.html', title='Planer', form=form, books=books, films=films,
-                           name_track_books=NAME_TRACK_BOOKS, name_track_films=NAME_TRACK_FILMS,
-                           data=data, count_book=count_book, count_film=count_film)
+    if current_user.is_authenticated:
+        count_book, count_film = 0, 0
+        session = db_session.create_session()
+        data = NOW
+        NAME_TRACK_BOOKS = ('Название', 'Автор', 'Краткое описание', 'Дата начала', 'Дата окончания', 'Оценка')
+        NAME_TRACK_FILMS = ('Название', 'Оценка')
+        tasks = session.query(models.tasks.Tasks) \
+            .filter(models.tasks.Tasks.data == data, models.tasks.Tasks.user == current_user) \
+            .order_by(models.tasks.Tasks.start_time)
+        books = session.query(models.books_tracker.Books_tracker) \
+            .filter(models.books_tracker.Books_tracker.user == current_user) \
+            .order_by(models.books_tracker.Books_tracker.start_date)
+        films = session.query(models.films_tracker.Films_tracker) \
+            .filter(models.films_tracker.Films_tracker.user == current_user)
+        for item in books:
+            count_book = 1
+            break
+        for item in films:
+            count_film = 1
+            break
+        return render_template('index.html', title='Planer', tasks=tasks, books=books, films=films,
+                               name_track_books=NAME_TRACK_BOOKS, name_track_films=NAME_TRACK_FILMS,
+                               data=data, count_book=count_book, count_film=count_film)
+    return render_template('index.html', title='Planer')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -64,14 +64,16 @@ def login():
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
+    param = {'title': 'Регистрация'}
     form = RegistrationForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('registration.html', title='Регистрация', form=form, message="Пароли не совпадают")
+            param['message'] = 'Пароли не совпадают'
+            return render_template('registration.html', form=form, **param)
         session = db_session.create_session()
         if session.query(models.user.User).filter(models.user.User.login == form.login.data).first():
-            return render_template('registration.html', title='Регистрация', form=form,
-                                   message="Такой пользователь уже есть")
+            param['message'] = 'Такой пользователь уже есть'
+            return render_template('registration.html', form=form, **param)
         user = models.user.User(name=form.name.data, surname=form.surname.data, login=form.login.data)
         user.set_password(form.password.data)
         session.add(user)
@@ -84,14 +86,14 @@ def registration():
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
+    return redirect('/')
 
 
 @app.route('/tasks/<page>/<data>', methods=['GET', 'POST'])
 @login_required
 def add_tasks(page, data):
     form = TasksForm()
-    if request.method == "GET":
+    if request.method == 'GET':
         form.data.data = datetime.strptime(data, '%d-%m-%Y').date()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -103,18 +105,18 @@ def add_tasks(page, data):
         tasks.user = current_user
         session.merge(tasks)
         session.commit()
-        return redirect('/'+page)
+        return redirect('/' + page)
     return render_template('tasks.html', title='Добавление Задачи', form=form, data=data)
 
 
-@app.route('/change_tasks/<page>/<data>/<id_task>', methods=['GET', 'POST'])
+@app.route('/change_tasks/<page>/<data_task>/<id_task>', methods=['GET', 'POST'])
 @login_required
-def change_tasks(id_task, page, data):
+def change_tasks(id_task, page, data_task):
     form = TasksForm()
     session = db_session.create_session()
     tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
                                                      models.tasks.Tasks.user == current_user).first()
-    if request.method == "GET":
+    if request.method == 'GET':
         if tasks:
             form.text_task.data = tasks.text_task
             data = datetime.strptime(tasks.data, '%d-%m-%Y').date()
@@ -130,74 +132,89 @@ def change_tasks(id_task, page, data):
             tasks.start_time = form.start_time.data
             tasks.id_important = form.important.data
             session.commit()
-            return redirect('/'+page+'/'+data)
+            if page == 'index':
+                return redirect('/' + page)
+            else:
+                return redirect('/' + page + '/' + data_task)
         else:
             abort(404)
     return render_template('tasks.html', title='Изменение Задачи', form=form)
 
 
-@app.route('/delete_tasks/<page>/<data>/<id_task>', methods=['GET', 'POST'])
+@app.route('/delete_tasks/<page>/<data_task>/<id_task>', methods=['GET', 'POST'])
 @login_required
-def delete_tasks(id_task, page, data):
+def delete_tasks(id_task, page, data_task):
     session = db_session.create_session()
-    tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.id_task == id_task,
-                                                     models.tasks.Tasks.user == current_user).first()
+    tasks = session.query(models.tasks.Tasks) \
+        .filter(models.tasks.Tasks.id_task == id_task, models.tasks.Tasks.user == current_user).first()
     if tasks:
         session.delete(tasks)
         session.commit()
     else:
         abort(404)
-    return redirect('/'+page+'/'+data)
+    if page == 'index':
+        return redirect('/' + page)
+    else:
+        return redirect('/' + page + '/' + data_task)
 
-@app.route('/alltasks/<data>', methods=['GET', 'POST'])
-def all_tasks(data):
+
+@app.route('/alltasks/<data_tasks_day>', methods=['GET', 'POST'])
+def all_tasks(data_tasks_day):
     session = db_session.create_session()
     form = AllTasksForm()
     if request.method == "GET":
-        form.data_day.data = datetime.strptime(data, '%d-%m-%Y').date()
-        data = form.data_day.data.strftime("%d-%m-%Y")
-        tasks = session.query(models.tasks.Tasks).filter(models.tasks.Tasks.data == data,
-                                                         models.tasks.Tasks.user == current_user). \
-            order_by(models.tasks.Tasks.start_time)
-        return render_template('alltasks.html', title='Planer', form=form, tasks=tasks, data=data)
+        form.data_day.data = datetime.strptime(data_tasks_day, '%d-%m-%Y').date()
+        tasks = session.query(models.tasks.Tasks) \
+            .filter(models.tasks.Tasks.data == data_tasks_day, models.tasks.Tasks.user == current_user) \
+            .order_by(models.tasks.Tasks.start_time)
+        return render_template('alltasks.html', title='Planer', form=form, tasks=tasks, data=data_tasks_day)
     if form.validate_on_submit():
-        data = form.data_day.data.strftime("%d-%m-%Y")
-        return redirect('/alltasks/'+data)
+        data_tasks_day = form.data_day.data.strftime("%d-%m-%Y")
+        '''tasks = session.query(models.tasks.Tasks) \
+            .filter(models.tasks.Tasks.data == data, models.tasks.Tasks.user == current_user) \
+            .order_by(models.tasks.Tasks.start_time)'''
+        return redirect('/alltasks/' + data_tasks_day)
+        #return render_template('alltasks.html', title='Planer', form=form, tasks=tasks, data=data)
     return render_template('alltasks.html', title='Planer', form=form)
 
 
-@app.route('/alltasks_week/<data>', methods=['GET', 'POST'])
-def all_tasks_week(data):
+@app.route('/alltasks_week/<data_tasks_week>', methods=['GET', 'POST'])
+def all_tasks_week(data_tasks_week):
+    DAY_RU = {'Monday': 'Понедельник', 'Tuesday': 'Вторник', 'Wednesday': 'Среда', 'Thursday': 'Четверг',
+              'Friday': 'Пятница', 'Saturday': 'Суббота', 'Sunday': 'Воскресенье'}
     day_date = {}
     session = db_session.create_session()
     form = AllTasksForm()
     if request.method == "GET":
-        form.data_week.data = datetime.strptime(data, '%d-%m-%Y').date()
-        data = form.data_week.data.strftime("%d-%m-%Y")
-        tasks = session.query(models.tasks.Tasks).\
-            filter(models.tasks.Tasks.data >= data,
-                   models.tasks.Tasks.user == current_user).order_by(models.tasks.Tasks.start_time)
-        for i in range(7):
-            day_date[DAY_RU[(form.data_week.data + timedelta(days=i)).strftime('%A')]] = \
-                    (form.data_week.data + timedelta(days=i)).strftime("%d-%m-%Y")
-        return render_template('alltasks_week.html', title='Planer', form=form, tasks=tasks, day_date=day_date,
-                               data=data)
-    if form.validate_on_submit():
-        data = form.data_week.data.strftime("%d-%m-%Y")
-        tasks = session.query(models.tasks.Tasks).\
-            filter(models.tasks.Tasks.data >= data,
-                   models.tasks.Tasks.user == current_user).order_by(models.tasks.Tasks.start_time)
+        #data = NOW
+        form.data_week.data = datetime.strptime(data_tasks_week, '%d-%m-%Y').date()
+        tasks = session.query(models.tasks.Tasks) \
+            .filter(models.tasks.Tasks.data >= data_tasks_week, models.tasks.Tasks.user == current_user) \
+            .order_by(models.tasks.Tasks.start_time)
         for i in range(7):
             day_date[DAY_RU[(form.data_week.data + timedelta(days=i)).strftime('%A')]] = \
                 (form.data_week.data + timedelta(days=i)).strftime("%d-%m-%Y")
-        return render_template('alltasks_week.html', title='Planer', form=form, tasks=tasks, day_date=day_date, data=data)
+        return render_template('alltasks_week.html', title='Planer', form=form, tasks=tasks, day_date=day_date,
+                               data=data_tasks_week)
+    if form.validate_on_submit():
+        data_tasks_week = form.data_week.data.strftime("%d-%m-%Y")
+        '''tasks = session.query(models.tasks.Tasks) \
+            .filter(models.tasks.Tasks.data >= data, models.tasks.Tasks.user == current_user) \
+            .order_by(models.tasks.Tasks.start_time)'''
+        '''for i in range(7):
+            day_date[DAY_RU[(form.data_week.data + timedelta(days=i)).strftime('%A')]] = \
+                (form.data_week.data + timedelta(days=i)).strftime("%d-%m-%Y")'''
+        return redirect('/alltasks_week/' + data_tasks_week)
+        #return render_template('alltasks_week.html', title='Planer', form=form, tasks=tasks, day_date=day_date,data=data_tasks_week)
     return render_template('alltasks_week.html', title='Planer', form=form, day_date=day_date)
 
 
 @app.route('/trackers', methods=['GET', 'POST'])
 def all_trackers():
-    trackers = {'Трекер книг': 'book','Трекер фильмов': 'film'}
-    return render_template('trackers.html', title='Planer', head = 'Трекеры', trackers=trackers)
+    data = NOW
+    param = {'title': 'Planer', 'head': 'Трекеры'}
+    TRACKERS = {'Трекер книг': 'book', 'Трекер фильмов': 'film'}
+    return render_template('trackers.html', **param, trackers=TRACKERS, data=data)
 
 
 @app.route('/add_book_tracker', methods=['GET', 'POST'])
@@ -224,9 +241,9 @@ def add_track_books():
 @login_required
 def delete_book_tracker(id_book):
     session = db_session.create_session()
-    books = session.query(models.books_tracker.Books_tracker).\
-        filter(models.books_tracker.Books_tracker.id_books_tracker == id_book,
-                                                     models.books_tracker.Books_tracker.user == current_user).first()
+    books = session.query(models.books_tracker.Books_tracker) \
+        .filter(models.books_tracker.Books_tracker.id_books_tracker == id_book,
+                models.books_tracker.Books_tracker.user == current_user).first()
     if books:
         session.delete(books)
         session.commit()
@@ -288,9 +305,9 @@ def add_track_films():
 @login_required
 def delete_film_tracker(id_film):
     session = db_session.create_session()
-    films = session.query(models.films_tracker.Films_tracker).\
-        filter(models.films_tracker.Films_tracker.id_films_tracker == id_film,
-                                                     models.films_tracker.Films_tracker.user == current_user).first()
+    films = session.query(models.films_tracker.Films_tracker) \
+        .filter(models.films_tracker.Films_tracker.id_films_tracker == id_film,
+                models.films_tracker.Films_tracker.user == current_user).first()
     if films:
         session.delete(films)
         session.commit()
@@ -304,9 +321,9 @@ def delete_film_tracker(id_film):
 def change_film_tracker(id_film):
     form = AddTrackFilms()
     session = db_session.create_session()
-    films = session.query(models.films_tracker.Films_tracker). \
-        filter(models.films_tracker.Films_tracker.id_films_tracker == id_film,
-               models.films_tracker.Films_tracker.user == current_user).first()
+    films = session.query(models.films_tracker.Films_tracker) \
+        .filter(models.films_tracker.Films_tracker.id_films_tracker == id_film,
+                models.films_tracker.Films_tracker.user == current_user).first()
     if request.method == "GET":
         if films:
             form.name.data = films.name
