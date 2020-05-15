@@ -1,6 +1,8 @@
+import os
 from datetime import datetime, date, timedelta
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_ngrok import run_with_ngrok
 from data import db_session
 from forms import LoginForm, RegistrationForm, TasksForm, AllTasksForm, AddTrackBooks, AddTrackFilms
 from data.db_session import __all_models as models
@@ -8,6 +10,7 @@ from data.db_session import __all_models as models
 NOW = date.today().strftime("%d-%m-%Y")
 
 app = Flask(__name__)
+run_with_ngrok(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secret_key'
@@ -346,4 +349,7 @@ def main():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True, port=8080, host='127.0.0.1')
+    #port = int(os.environ.get("PORT", 5000))
+    #app.run(host='0.0.0.0', port=port)
+    app.run()
+    #app.run(debug=True, use_reloader=True, port=8080, host='127.0.0.1')
